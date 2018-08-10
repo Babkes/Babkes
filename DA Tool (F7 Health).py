@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import re
 from selenium import webdriver
 import time
+import random
 names_df = pd.read_excel(r"C:\Users\g.rozenaite\Desktop\Link galutinio produkto.xlsx"
                          , sheet_name = 'Testuojam pabaiga')
 galutinis_exc = pd.ExcelWriter(r"C:\Users\g.rozenaite\Desktop\Galutinis produktas.xlsx")
@@ -16,7 +17,7 @@ driver_path=r'C:\Users\g.rozenaite\Desktop\\chromedriver.exe'
 #%%
 def google_search(search_term, api_key, cse_id, **kwargs):
     service = build("customsearch", "v1", developerKey=api_key)
-    results = service.cse().list(q = search_term, cx=cse_id, **kwargs).execute()
+    results = service.cse().list(q = search_term, cx=cse_id, **kwargs, ln = 'en').execute()
     if ('items') in results:
         return results ['items'] 
     else:
@@ -139,6 +140,7 @@ driver = webdriver.Chrome(executable_path=driver_path)
 driver.get('https://www.google.com/')
 time.sleep(2)
 n=1
+random.shuffle(urls)
 for u in urls:
     try:
         print('Processing: ', u)

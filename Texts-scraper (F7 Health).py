@@ -3,12 +3,13 @@ from bs4 import BeautifulSoup
 import re
 from selenium import webdriver
 import time
+import random
 url_df = pd.read_excel(r"C:\Users\g.rozenaite\Desktop\Link galutinio produkto.xlsx",
-                       sheet_name='Adante')
+                       sheet_name='Testuojam SpaCy')
 urls = url_df['url'].values.tolist()
 text_df = pd.DataFrame([])
 driver_path=r'C:\Users\g.rozenaite\Desktop\\chromedriver.exe' 
-#Defining data collection, crawling, and clenaing functions
+#Defining data collection, crawling, and cleaning functions
 def get_links_from_soup(soup):
 	links = [ item.get('src') for item in soup.find_all('frame') ]
 	links = [ l for l in links if l is not None]
@@ -98,20 +99,24 @@ def process_data(result):
 #%%
 driver = webdriver.Chrome(executable_path=driver_path)
 driver.get('https://www.google.com/')
-time.sleep(2)
+time.sleep(10)
 n=1
-for u in urls[:10000]:
-    print('Processing: ', u)
-    print(n, '/', len(urls))
-    n = n + 1
-    driver.get(u)
-    result = driver.page_source
-    text, links=process_data(result)
-    text_df = text_df.append(pd.DataFrame(
+random.shuffle(urls)
+for u in urls: #[5001:8000]:
+    try:
+        print('Processing: ', u)
+        print(n, '/', len(urls))
+        n = n + 1
+        driver.get(u)
+        result = driver.page_source
+        text, links=process_data(result)
+        text_df = text_df.append(pd.DataFrame(
         {'url': [u],
          'text': [text]},
         index=[0]), ignore_index=True)
-    print(text)
+        print(text)
+    except:
+        None
 driver.close()
 #%%
 galutinis_df = pd.merge(url_df[['snippet', 'id', 'url']],
