@@ -101,7 +101,7 @@ driver = webdriver.Chrome(executable_path=driver_path)
 driver.get('https://www.google.com/')
 time.sleep(10)
 n=1
-random.shuffle(urls)
+#random.shuffle(urls)
 for u in urls: #[5001:8000]:
     try:
         print('Processing: ', u)
