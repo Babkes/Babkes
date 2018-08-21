@@ -5,7 +5,7 @@ from selenium import webdriver
 import time
 import random
 url_df = pd.read_excel(r"C:\Users\g.rozenaite\Desktop\Link galutinio produkto.xlsx",
-                       sheet_name='Testuojam SpaCy')
+                       sheet_name='Testuojam gramdyma')
 urls = url_df['url'].values.tolist()
 text_df = pd.DataFrame([])
 driver_path=r'C:\Users\g.rozenaite\Desktop\\chromedriver.exe' 
