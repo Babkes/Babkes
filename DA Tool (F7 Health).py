@@ -13,16 +13,21 @@ url_df = pd.DataFrame([])
 text_df = pd.DataFrame([])
 api_key = "AIzaSyAp3TRE8lc3A02rf0X82tRckIcx8pPosFc"
 cse_id = "007703736530656354066:0q3s49bgw44"
-driver_path=r'C:\Users\g.rozenaite\Documents\Python Scripts\chromedriver.exe' 
+driver_path=r'C:\Users\g.rozenaite\Desktop\chromedriver.exe' 
 #%%
 def google_search(search_term, api_key, cse_id, **kwargs):
     search = build("customsearch", "v1", developerKey=api_key)
     results = search.cse().list(
-            q = search_term, cx=cse_id, **kwargs, hl = 'lang_en').execute()
+            q = search_term, cx=cse_id, **kwargs).execute()
     if ('items') in results:
         return results ['items'] 
     else:
         print (n + ' ' + 'No Results')
+        #Defining data collection, crawling, and cleaning functions
+def get_links_from_soup(soup):
+	links = [ item.get('src') for item in soup.find_all('frame') ]
+	links = [ l for l in links if l is not None]
+	return list(set(links))
 #
 def clean_it(soup):
     try:
@@ -104,12 +109,13 @@ def mini_clean(string):
 #
 def process_data(result):
     soup = BeautifulSoup(result, 'lxml')
+    links = get_links_from_soup(soup)
     soup = clean_it(soup)
     text = soup.text
     text = mini_clean(text)
-    return(text)
+    return(text, links)
 #%%seaching
-for n in names[:200]:
+for n in names[:10]:
     results1 = google_search(n, api_key, cse_id, num=10)
     if results1 != None:
         for result in results1:
@@ -141,7 +147,7 @@ for u in urls:
         n = n + 1
         driver.get(u)
         result = driver.page_source
-        text = process_data(result)
+        text, links = process_data(result)
         print (text)
         text_df = text_df.append(pd.DataFrame(
         {'url': [u],
