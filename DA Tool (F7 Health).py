@@ -5,6 +5,7 @@ import re
 from selenium import webdriver
 import time
 import random
+import pyodbc
 names_df = pd.read_excel(r"C:\Users\g.rozenaite\Desktop\Pradzia.xlsx"
                          , sheet_name = 'Adagio')
 galutinis_exc = pd.ExcelWriter(r"C:\Users\g.rozenaite\Desktop\Galutinis produktas.xlsx")
@@ -14,6 +15,12 @@ text_df = pd.DataFrame([])
 api_key = "AIzaSyAp3TRE8lc3A02rf0X82tRckIcx8pPosFc"
 cse_id = "007703736530656354066:0q3s49bgw44"
 driver_path=r'C:\Users\g.rozenaite\Desktop\chromedriver.exe' 
+cnxn = pyodbc.connect("Driver={SQL Server Native Client 11.0};" 
+                      "Server=vpvi-77-pc\sqlexpress;" 
+                      "Database=D4I_ser;" 
+                      "Trusted_Connection=yes;") 
+  
+cursor = cnxn.cursor() 
 #%%
 def google_search(search_term, api_key, cse_id, **kwargs):
     search = build("customsearch", "v1", developerKey=api_key)
@@ -140,7 +147,7 @@ driver.get('https://www.google.com/')
 time.sleep(10)
 n=1
 random.shuffle(urls)
-for u in urls:
+for u in urls[:10]:
     try:
         print('Processing: ', u)
         print(n, '/', len(urls))
