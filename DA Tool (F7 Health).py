@@ -113,7 +113,6 @@ def process_data(result):
     text = mini_clean(text)
     return(text, links)
 #%%seaching
-time.sleep(10)
 for n in names:
     results1 = google_search(n, api_key, cse_id, num=10)
     if results1 != None:
@@ -138,7 +137,7 @@ urls = galutinis_df['url'].values.tolist()
 #%%parsing
 driver = webdriver.Chrome(executable_path=driver_path)
 driver.get('https://www.google.com/')
-time.sleep(10)
+time.sleep(2)
 n=1
 for u in urls:
     try:
