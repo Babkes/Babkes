@@ -486,3 +486,10 @@ mama = [['http://www.cytos.com/press-release', 'http://www.cytos.com/news/274/10
 import json
 with open(r'C:\Users\g.rozenaite\Desktop\D4I_companies_summary.txt', 'w') as outfile:
     json.dump(dictorelis, outfile)
+#%%
+def Remove(intangy_zodynas): 
+    final_list = [] 
+    for num in intangy_zodynas: 
+        if num not in final_list: 
+            final_list.append(num) 
+    return final_list 
